@@ -1,0 +1,146 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+ml-course-venv/
+venv/
+ENV/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Notebooks (development only - NO commit)
+notebooks/
+*.ipynb
+
+# Models (tracked with Git LFS)
+# Old timestamped models (gitignored)
+models/*_2026*.joblib
+
+# Version directories and latest symlinks ARE tracked
+!models/v*/
+!models/v*/*.joblib
+!models/*_latest.joblib
+
+# Other model formats (not used)
+models/*.pkl
+models/*.h5
+models/*.pt
+models/*.pth
+
+# Data (NO commitear - datasets grandes)
+data/*.csv
+data/*.json
+data/*.txt
+data/*.parquet
+data/malimg_paper_dataset_imgs/
+data/*/
+!data/.gitkeep
+!data/README.md
+
+# IDE
+.vscode/
+.idea/
+.cursor/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Testing & Coverage
+htmlcov/
+.coverage
+.pytest_cache/
+.tox/
+coverage.xml
+*.cover
+
+# Ruff cache
+.ruff_cache/
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Project-specific: Development docs (NO commit)
+README_DEV.md
+DEPLOYMENT_CHECKLIST.md
+
+# Requirements: requirements.txt and requirements-dev.txt are TRACKED
+# (Generated from pyproject.toml with `uv pip compile`, needed for Docker)
+# Ignore lock files if using other tools:
+# uv.lock is tracked if using uv sync
+poetry.lock
+Pipfile.lock
+
+# Comments directory
+.comments/
+
+# Assets (if any large files)
+assets/
+
+# MLflow
+mlruns/
+mlflow.db
+.mlflow/
+
+# MLflow artifacts tracked separately
+!mlruns/.gitkeep
+
+# Node.js / Frontend
+node_modules/
+src/frontend/dist/
+src/frontend/dist-ssr/
+src/frontend/.env
+src/frontend/.env.local
+*.local
+
+# Package locks (npm)
+package-lock.json
+
+# Threat Intelligence Aggregator specific
+.env
+.env.local
+.env.production
+*.db
+*.sqlite
+*.sqlite3
+src/threat_intelligence_aggregator/data/
+src/threat_intelligence_aggregator/models/
+src/threat_intelligence_aggregator/.cache/
+threat_intel_cache/
+cve_cache/

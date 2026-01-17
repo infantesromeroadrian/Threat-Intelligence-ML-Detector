@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Threat Intelligence Aggregator</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="logo">🛡️ Threat Intelligence Aggregator</h1>
+                <nav class="nav">
+                    <button class="nav-btn active" data-section="dashboard">Dashboard</button>
+                    <button class="nav-btn" data-section="cves">CVEs</button>
+                    <button class="nav-btn" data-section="iocs">IOCs</button>
+                    <button class="nav-btn" data-section="threats">Threats</button>
+                    <button class="nav-btn" data-section="topics">Topics</button>
+                    <button class="nav-btn" data-section="alerts">Alerts</button>
+                </nav>
+                <div class="header-status">
+                    <span class="status-indicator" id="apiStatus">●</span>
+                    <span id="apiStatusText">Checking...</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="section active">
+                <h2 class="section-title">📊 Dashboard Overview</h2>
+                
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">🔒</div>
+                        <div class="stat-content">
+                            <h3 class="stat-label">Total CVEs</h3>
+                            <p class="stat-value" id="stat-total-cves">-</p>
+                            <span class="stat-meta" id="stat-critical-cves">0 Critical</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">🎯</div>
+                        <div class="stat-content">
+                            <h3 class="stat-label">IOCs</h3>
+                            <p class="stat-value" id="stat-total-iocs">-</p>
+                            <span class="stat-meta" id="stat-active-iocs">0 Active</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">⚠️</div>
+                        <div class="stat-content">
+                            <h3 class="stat-label">Threats</h3>
+                            <p class="stat-value" id="stat-total-threats">-</p>
+                            <span class="stat-meta" id="stat-high-threats">0 High Severity</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">🚨</div>
+                        <div class="stat-content">
+                            <h3 class="stat-label">Active Alerts</h3>
+                            <p class="stat-value" id="stat-active-alerts">-</p>
+                            <span class="stat-meta" id="stat-critical-alerts">0 Critical</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="activity-section">
+                    <h3>Recent Critical CVEs</h3>
+                    <div id="recent-cves" class="items-list"></div>
+                </div>
+
+                <div class="activity-section">
+                    <h3>Active Alerts</h3>
+                    <div id="active-alerts" class="items-list"></div>
+                </div>
+            </section>
+
+            <!-- CVEs Section -->
+            <section id="cves-section" class="section">
+                <h2 class="section-title">🔒 CVE Management</h2>
+                
+                <div class="filters">
+                    <input type="text" id="cve-search" placeholder="Search CVEs..." class="search-input">
+                    <select id="cve-severity-filter" class="filter-select">
+                        <option value="">All Severities</option>
+                        <option value="CRITICAL">Critical</option>
+                        <option value="HIGH">High</option>
+                        <option value="MEDIUM">Medium</option>
+                        <option value="LOW">Low</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="app.loadCVEs()">🔄 Refresh</button>
+                </div>
+
+                <div id="cves-list" class="items-list"></div>
+                <div class="pagination" id="cves-pagination"></div>
+            </section>
+
+            <!-- IOCs Section -->
+            <section id="iocs-section" class="section">
+                <h2 class="section-title">🎯 Indicators of Compromise</h2>
+                
+                <div class="filters">
+                    <input type="text" id="ioc-search" placeholder="Search IOCs..." class="search-input">
+                    <select id="ioc-type-filter" class="filter-select">
+                        <option value="">All Types</option>
+                        <option value="IP_ADDRESS">IP Address</option>
+                        <option value="DOMAIN">Domain</option>
+                        <option value="URL">URL</option>
+                        <option value="EMAIL">Email</option>
+                        <option value="FILE_HASH_MD5">MD5 Hash</option>
+                        <option value="FILE_HASH_SHA256">SHA256 Hash</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="app.loadIOCs()">🔄 Refresh</button>
+                </div>
+
+                <div id="iocs-list" class="items-list"></div>
+                <div class="pagination" id="iocs-pagination"></div>
+            </section>
+
+            <!-- Threats Section -->
+            <section id="threats-section" class="section">
+                <h2 class="section-title">⚠️ Threat Intelligence</h2>
+                
+                <div class="filters">
+                    <input type="text" id="threat-search" placeholder="Search threats..." class="search-input">
+                    <select id="threat-type-filter" class="filter-select">
+                        <option value="">All Types</option>
+                        <option value="MALWARE">Malware</option>
+                        <option value="RANSOMWARE">Ransomware</option>
+                        <option value="PHISHING">Phishing</option>
+                        <option value="APT">APT</option>
+                        <option value="BOTNET">Botnet</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="app.loadThreats()">🔄 Refresh</button>
+                </div>
+
+                <div id="threats-list" class="items-list"></div>
+                <div class="pagination" id="threats-pagination"></div>
+            </section>
+
+            <!-- Topics Section -->
+            <section id="topics-section" class="section">
+                <h2 class="section-title">📚 Topic Discovery</h2>
+                
+                <div class="filters">
+                    <button class="btn btn-primary" onclick="app.loadTopics()">🔄 Refresh</button>
+                    <button class="btn btn-secondary" onclick="app.showDiscoverTopics()">🔍 Discover New Topics</button>
+                </div>
+
+                <div id="topics-list" class="items-list"></div>
+            </section>
+
+            <!-- Alerts Section -->
+            <section id="alerts-section" class="section">
+                <h2 class="section-title">🚨 Security Alerts</h2>
+                
+                <div class="filters">
+                    <select id="alert-status-filter" class="filter-select">
+                        <option value="">All Status</option>
+                        <option value="NEW">New</option>
+                        <option value="ACKNOWLEDGED">Acknowledged</option>
+                        <option value="IN_PROGRESS">In Progress</option>
+                        <option value="RESOLVED">Resolved</option>
+                    </select>
+                    <select id="alert-severity-filter" class="filter-select">
+                        <option value="">All Severities</option>
+                        <option value="CRITICAL">Critical</option>
+                        <option value="HIGH">High</option>
+                        <option value="MEDIUM">Medium</option>
+                        <option value="LOW">Low</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="app.loadAlerts()">🔄 Refresh</button>
+                </div>
+
+                <div id="alerts-list" class="items-list"></div>
+                <div class="pagination" id="alerts-pagination"></div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Threat Intelligence Aggregator | Built with ❤️ for Cybersecurity</p>
+        </div>
+    </footer>
+
+    <!-- Modal for Alert Details -->
+    <div id="alertModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="app.closeModal()">&times;</span>
+            <div id="alertModalBody"></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

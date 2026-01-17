@@ -1,0 +1,71 @@
+# =============================================================================
+# Threat Intelligence Aggregator - Docker Compose (Development Override)
+# =============================================================================
+# Usage: docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+# =============================================================================
+
+services:
+  # ---------------------------------------------------------------------------
+  # API Service (Development with hot-reload)
+  # ---------------------------------------------------------------------------
+  api:
+    build:
+      context: .
+      target: development  # Use development stage
+    image: threat-intel-aggregator:dev
+    container_name: threat-intel-api-dev
+    environment:
+      - APP_ENV=development
+      - LOG_LEVEL=DEBUG
+      - API_RELOAD=true
+    volumes:
+      # Mount source code for hot-reload
+      - ./src:/app/src:ro
+      - ./pyproject.toml:/app/pyproject.toml:ro
+      # Persistent data (same as production)
+      - threat-intel-data:/app/data
+      - threat-intel-models:/app/models
+      - threat-intel-cache:/app/threat_intel_cache
+    command: >
+      uvicorn src.threat_intelligence_aggregator.infrastructure.api.main:app
+      --host 0.0.0.0
+      --port 8000
+      --reload
+      --log-level debug
+
+  # ---------------------------------------------------------------------------
+  # Frontend Service (Development) - HTML + JavaScript
+  # COMMENTED OUT - Will be implemented in Session 5
+  # ---------------------------------------------------------------------------
+  # frontend:
+  #   image: nginx:alpine
+  #   container_name: threat-intel-frontend-dev
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - ./frontend:/usr/share/nginx/html:ro
+  #   networks:
+  #     - threat-intel-network
+  #   depends_on:
+  #     - api
+
+  # ---------------------------------------------------------------------------
+  # CLI Service (Development)
+  # ---------------------------------------------------------------------------
+  cli:
+    build:
+      context: .
+      target: development
+    image: threat-intel-aggregator:dev
+    container_name: threat-intel-cli-dev
+    environment:
+      - APP_ENV=development
+      - LOG_LEVEL=DEBUG
+    volumes:
+      # Mount source code for running commands
+      - ./src:/app/src:ro
+      - ./pyproject.toml:/app/pyproject.toml:ro
+      # Persistent data
+      - threat-intel-data:/app/data
+      - threat-intel-models:/app/models
+      - threat-intel-cache:/app/threat_intel_cache

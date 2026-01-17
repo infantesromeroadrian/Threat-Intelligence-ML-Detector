@@ -1,0 +1,120 @@
+# =============================================================================
+# Threat Intelligence Aggregator - Docker Compose (Production)
+# =============================================================================
+
+services:
+  # ---------------------------------------------------------------------------
+  # API Service (FastAPI)
+  # ---------------------------------------------------------------------------
+  api:
+    build:
+      context: .
+      target: app  # Production stage
+    image: threat-intel-aggregator:latest
+    container_name: threat-intel-api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_ENV=production
+      - LOG_LEVEL=INFO
+      - DATABASE_URL=sqlite:////app/data/threat_intel.db
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+    env_file:
+      - .env  # Load additional config from .env file
+    volumes:
+      # Persistent data storage
+      - threat-intel-data:/app/data
+      - threat-intel-models:/app/models
+      - threat-intel-cache:/app/threat_intel_cache
+    networks:
+      - threat-intel-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    depends_on:
+      - db
+
+  # ---------------------------------------------------------------------------
+  # Frontend Service (Nginx + HTML/JavaScript)
+  # ---------------------------------------------------------------------------
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: threat-intel-frontend:latest
+    container_name: threat-intel-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    networks:
+      - threat-intel-network
+    depends_on:
+      - api
+
+  # ---------------------------------------------------------------------------
+  # Database (SQLite - using volume for persistence)
+  # Note: For production, consider PostgreSQL or MySQL
+  # ---------------------------------------------------------------------------
+  db:
+    image: alpine:latest
+    container_name: threat-intel-db
+    restart: unless-stopped
+    volumes:
+      - threat-intel-data:/data
+    networks:
+      - threat-intel-network
+    command: tail -f /dev/null  # Keep container running
+
+  # ---------------------------------------------------------------------------
+  # CLI Service (for running commands)
+  # ---------------------------------------------------------------------------
+  cli:
+    build:
+      context: .
+      target: app
+    image: threat-intel-aggregator:latest
+    container_name: threat-intel-cli
+    environment:
+      - APP_ENV=production
+      - LOG_LEVEL=INFO
+      - DATABASE_URL=sqlite:////app/data/threat_intel.db
+    env_file:
+      - .env
+    volumes:
+      - threat-intel-data:/app/data
+      - threat-intel-models:/app/models
+      - threat-intel-cache:/app/threat_intel_cache
+    networks:
+      - threat-intel-network
+    profiles:
+      - cli  # Only start when explicitly requested
+    command: tail -f /dev/null  # Keep container running for exec commands
+    depends_on:
+      - db
+
+# =============================================================================
+# Networks
+# =============================================================================
+networks:
+  threat-intel-network:
+    driver: bridge
+    name: threat-intel-network
+
+# =============================================================================
+# Volumes (Persistent Storage)
+# =============================================================================
+volumes:
+  threat-intel-data:
+    name: threat-intel-data
+    driver: local
+  threat-intel-models:
+    name: threat-intel-models
+    driver: local
+  threat-intel-cache:
+    name: threat-intel-cache
+    driver: local

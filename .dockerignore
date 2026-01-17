@@ -1,0 +1,105 @@
+# .dockerignore - Exclude files from Docker build context
+
+# Virtual environments
+venv/
+env/
+ENV/
+ml-course-venv/
+.venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# IDE
+.vscode/
+.idea/
+.cursor/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.mypy_cache/
+.ruff_cache/
+
+# Documentation (development only)
+DEPLOYMENT_CHECKLIST.md
+README_DEV.md
+historyMD/
+
+# Comments
+.comments/
+
+# Docker itself
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Environment files (use .env.example as template)
+.env
+.env.local
+.env.production
+
+# Data files (too large)
+data/*.csv
+data/*.json
+data/*.txt
+data/*.parquet
+
+# Models (will download/train in container)
+models/*.pth
+models/*.pt
+models/*.h5
+models/*.pkl
+models/*.joblib
+
+# Logs
+*.log
+logs/
+
+# Notebooks (not needed in production)
+notebooks/
+
+# MLflow
+mlruns/
+mlflow.db
+
+# Temporary files
+*.tmp
+*.temp
+
+# Assets
+assets/
+
+# Cache directories
+threat_intel_cache/
+cve_cache/
+.cache/
+
+# Databases (will be created in container)
+*.db
+*.sqlite
+*.sqlite3
