@@ -1,264 +1,318 @@
-# 📧 SPAM & PHISHING Detector - Full Stack ML Application
+# 🛡️ Threat Intelligence Aggregator
 
-[![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![React](https://img.shields.io/badge/react-18-61dafb.svg)](https://react.dev)
-[![TypeScript](https://img.shields.io/badge/typescript-5.0+-blue.svg)](https://www.typescriptlang.org/)
-[![Code Style](https://img.shields.io/badge/code%20style-ruff-black)](https://github.com/astral-sh/ruff)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+> Production-ready AI-powered cybersecurity threat intelligence platform
 
-**Production-ready full-stack email threat detection system** using Machine Learning with modern React frontend and FastAPI backend.
+[![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.109+-green.svg)](https://fastapi.tiangolo.com/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-## 🏗️ Project Structure
+**Threat Intelligence Aggregator** is an enterprise-grade platform for collecting, analyzing, and managing cybersecurity threat intelligence using state-of-the-art AI/ML techniques.
 
-```
-spam-phishing-detector/
-├── src/
-│   ├── backend/          # FastAPI + ML models (Python 3.12)
-│   │   ├── spam_detector/  # Python package (flat layout)
-│   │   ├── tests/
-│   │   ├── models/       # Git LFS tracked
-│   │   └── README.md     # Backend docs
-│   └── frontend/         # React + TypeScript + Vite
-│       ├── src/
-│       ├── public/
-│       └── README.md     # Frontend docs
-├── docs/                 # Documentation
-│   └── README_FULL_STACK.md
-├── docker-compose.yml    # Full-stack deployment
-├── LICENSE
-└── README.md             # This file
-```
+---
 
 ## ✨ Features
 
-### 🎯 ML Capabilities
-- **Dual Detection**: Simultaneous SPAM and PHISHING classification
-- **High Accuracy**: ~95% SPAM, ~92% PHISHING detection
-- **Fast Inference**: <10ms per email
-- **Model Versioning**: MLflow + Git LFS
+### 🔐 CVE Management
+- Automated CVE scraping from NVD
+- CVSS score tracking
+- Advanced filtering (severity, vendor, product, date range)
+- Real-time statistics dashboard
 
-### 🚀 Interfaces
-- **Modern Web UI**: React with dark glassmorphism theme
-- **REST API**: FastAPI with automatic OpenAPI docs
-- **CLI Tool**: Rich terminal interface
+### 🎯 IOC Extraction
+- Automatic extraction using spaCy NER
+- Support for IPs, domains, URLs, emails, file hashes
+- Confidence scoring
+- Context preservation
 
-### 🏛️ Architecture
-- **Backend**: Hexagonal/Clean Architecture
-- **Frontend**: Component-based React with TypeScript
-- **Type Safety**: End-to-end with Pydantic + TypeScript
-- **Testing**: Comprehensive test suites
+### ⚠️ Threat Intelligence
+- AlienVault OTX integration
+- Multi-source aggregation
+- BERT-based severity classification
+- Topic modeling with LDA
+
+### 📚 Topic Discovery
+- Automatic topic extraction from threat documents
+- Coherence score calculation
+- Manual topic labeling
+- Significant topic filtering
+
+### 🚨 Smart Alerts
+- Intelligent alert generation
+- Complete workflow management (NEW → ACKNOWLEDGED → RESOLVED)
+- False positive tracking
+- Actionable recommendations
+
+### 🤖 ML Models
+- **NER IOC Extractor**: spaCy + regex patterns
+- **LDA Topic Modeler**: gensim-based topic discovery
+- **BERT Classifier**: Severity classification (5 levels)
+- **Word2Vec**: Document/word similarity search
+
+### 🌐 REST API
+- **35 endpoints** with full CRUD operations
+- Auto-generated documentation (Swagger/ReDoc)
+- Pagination & advanced filtering
+- CORS-enabled
+
+### 🎨 Web Dashboard
+- Modern responsive UI
+- Real-time API status
+- Interactive filtering
+- Alert workflow management
+
+---
 
 ## 🚀 Quick Start
 
 ### Prerequisites
+- Python 3.10+
+- Docker & Docker Compose (recommended)
 
-- **Python 3.10+** (backend)
-- **Node.js 18+** (frontend)
-- **uv** (recommended): `curl -LsSf https://astral.sh/uv/install.sh | sh`
-- **Docker** (optional, for containerized deployment)
-
-### Option 1: Development Setup
-
-#### Backend
+### Run with Docker
 
 ```bash
-cd src/backend
+# 1. Generate test data
+python scripts/test_pipeline.py
 
-# Create virtual environment
-uv venv && source .venv/bin/activate
+# 2. Start all services
+docker compose up -d --build
 
-# Install dependencies
-uv sync
-
-# Run API server
-spam-detector-api
-# → http://localhost:8000
-# → Docs: http://localhost:8000/docs
-
-# Or use CLI
-spam-detector predict "URGENT! You won a lottery!"
+# 3. Access the application
+open http://localhost              # Web Dashboard
+open http://localhost:8000/docs    # API Documentation
 ```
 
-#### Frontend
+### Run Locally
 
 ```bash
-cd src/frontend
+# 1. Create virtual environment
+python -m venv venv
+source venv/bin/activate
 
-# Install dependencies
-npm install
+# 2. Install dependencies
+pip install -r requirements.txt
 
-# Create .env file
-echo "VITE_API_URL=http://localhost:8000" > .env
+# 3. Generate test data
+python scripts/test_pipeline.py
 
-# Start dev server
-npm run dev
-# → http://localhost:5173
+# 4. Start API
+uvicorn threat_intelligence_aggregator.infrastructure.api.main:app --reload
+
+# 5. Serve frontend (new terminal)
+cd frontend && python -m http.server 8080
 ```
 
-### Option 2: Docker Compose (Full Stack)
+---
+
+## 📊 Architecture
+
+```
+Frontend (Nginx) → FastAPI → Application Layer → Domain Layer → Infrastructure
+                    ↓                                              ↓
+                  REST API                                    Adapters
+                    ↓                                              ↓
+              Pydantic DTOs                          ML Models | Repositories
+                    ↓                                              ↓
+            35 Endpoints                                      SQLite DB
+```
+
+**Key Principles**:
+- ✅ Hexagonal Architecture (Ports & Adapters)
+- ✅ Domain-Driven Design
+- ✅ SOLID principles
+- ✅ 100% type hints (mypy --strict ready)
+- ✅ Zero infrastructure dependencies in domain
+
+---
+
+## 🛠️ Technology Stack
+
+### Backend
+- **FastAPI** - Modern async web framework
+- **SQLAlchemy** - ORM
+- **Pydantic** - Data validation
+- **spaCy** - NLP/NER
+- **gensim** - Topic modeling
+- **transformers** - BERT classification
+- **PyTorch** - Deep learning
+
+### Frontend
+- **HTML5/CSS3** - Modern web standards
+- **Vanilla JavaScript** - No frameworks
+- **Nginx** - Web server & reverse proxy
+
+### DevOps
+- **Docker** - Containerization
+- **Docker Compose** - Orchestration
+- **uv** - Fast Python package manager
+
+---
+
+## 📁 Project Structure
+
+```
+src/threat_intelligence_aggregator/
+├── domain/              # Pure business logic (NO dependencies)
+│   ├── entities/       # CVE, IOC, ThreatIntel, Topic, Alert
+│   ├── ports/          # Interfaces (Protocol)
+│   └── services/       # Business rules
+├── application/        # Use cases
+└── infrastructure/     # Technical implementation
+    ├── adapters/      # ML, repos, scrapers
+    ├── api/           # FastAPI routes
+    └── config/        # Settings, logging
+
+frontend/               # Web dashboard
+├── index.html
+├── css/main.css
+└── js/
+    ├── api.js         # API client
+    └── app.js         # App logic
+```
+
+---
+
+## 🧪 Testing
 
 ```bash
-# Build and run both services
-docker-compose up --build
+# Generate test data
+python scripts/test_pipeline.py
 
-# Access:
-# - Frontend: http://localhost:5173
-# - Backend API: http://localhost:8000
-# - API Docs: http://localhost:8000/docs
+# Verify database
+sqlite3 threat_intel_test.db
+> SELECT COUNT(*) FROM cves;
+> SELECT COUNT(*) FROM iocs;
+
+# Test API endpoints
+curl http://localhost:8000/health
+curl http://localhost:8000/api/cves/stats
+curl http://localhost:8000/api/alerts/active
 ```
+
+---
+
+## 📖 API Documentation
+
+**Interactive Testing**:
+- Swagger UI: http://localhost:8000/docs
+- ReDoc: http://localhost:8000/redoc
+- OpenAPI Schema: http://localhost:8000/openapi.json
+
+**Key Endpoints**:
+```
+GET  /api/cves              # List CVEs
+GET  /api/cves/stats        # CVE statistics
+GET  /api/cves/critical     # Critical CVEs
+
+GET  /api/iocs              # List IOCs
+GET  /api/iocs/active       # Active IOCs
+
+GET  /api/threats           # Threat intelligence
+GET  /api/threats/high-severity  # High severity threats
+
+GET  /api/topics            # Discovered topics
+GET  /api/topics/significant  # Significant topics
+
+GET  /api/alerts            # Security alerts
+POST /api/alerts/{id}/acknowledge  # Acknowledge alert
+POST /api/alerts/{id}/resolve      # Resolve alert
+```
+
+---
+
+## 🔐 Security
+
+- ✅ Input validation (Pydantic)
+- ✅ SQL injection prevention (ORM)
+- ✅ CORS configured
+- ✅ Secret management (environment variables)
+- ✅ Security headers (Nginx)
+- ✅ Dependency scanning ready
+
+---
+
+## 📊 Statistics
+
+- **9,600+** lines of code
+- **40** Python files
+- **35** REST API endpoints
+- **5** domain entities
+- **4** ML models
+- **5** data repositories
+- **100%** type coverage
+
+---
+
+## 🎯 Use Cases
+
+### Security Operations Center (SOC)
+- Monitor incoming CVEs
+- Track IOCs across sources
+- Manage security alerts
+- Discover emerging threat patterns
+
+### Threat Intelligence Team
+- Aggregate threat feeds
+- Extract IOCs automatically
+- Classify threats by severity
+- Generate actionable reports
+
+### Security Researchers
+- Analyze threat trends
+- Discover topic clusters
+- Correlate CVEs with threats
+- Track vulnerability evolution
+
+---
 
 ## 📚 Documentation
 
 | Document | Description |
 |----------|-------------|
-| [Backend README](src/backend/README.md) | Backend setup, API docs, CLI usage |
-| [Frontend README](src/frontend/README.md) | Frontend development, components, deployment |
-| [Full-Stack Guide](docs/README_FULL_STACK.md) | Complete setup and architecture guide |
-
-## 🎯 Tech Stack
-
-### Backend
-- **Framework**: FastAPI
-- **ML**: scikit-learn, NLTK
-- **Validation**: Pydantic
-- **Testing**: pytest
-- **Tooling**: uv, ruff, mypy
-
-### Frontend
-- **Framework**: React 18 + TypeScript
-- **Build**: Vite
-- **Styling**: Tailwind CSS
-- **Animation**: Framer Motion
-- **Charts**: Chart.js
-- **State**: React Query
-- **HTTP**: Axios
-
-## 📊 ML Models
-
-| Model | Algorithm | Accuracy | Samples | Features |
-|-------|-----------|----------|---------|----------|
-| SPAM | Logistic Regression | ~95% | 5,572 | TF-IDF (5000) |
-| PHISHING | Logistic Regression | ~92% | 11,430 | TF-IDF (5000) |
-
-Models are versioned with **Git LFS** and tracked with **MLflow**.
-
-## 🔌 API Usage
-
-### Classify Email
-
-```bash
-curl -X POST http://localhost:8000/api/v1/classify \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email_text": "URGENT! You won a lottery! Click here now!"
-  }'
-```
-
-**Response:**
-
-```json
-{
-  "verdict": "PHISHING",
-  "risk_level": "HIGH",
-  "is_malicious": true,
-  "spam_probability": 0.505,
-  "phishing_probability": 0.985,
-  "execution_time_ms": 1.81,
-  "threat_report": {
-    "risk_score": 84,
-    "iocs": [...],
-    "recommendations": [...]
-  }
-}
-```
-
-See [API documentation](http://localhost:8000/docs) for complete endpoints.
-
-## 🧪 Testing
-
-### Backend
-
-```bash
-cd src/backend
-pytest                           # Run all tests
-pytest --cov=spam_detector      # With coverage
-pytest tests/unit               # Only unit tests
-```
-
-### Frontend
-
-```bash
-cd src/frontend
-npm run lint                    # Lint code
-npm run build                   # Build for production
-```
-
-## 🚢 Deployment
-
-### Backend Options
-- **Docker**: Use `src/backend/Dockerfile`
-- **Railway/Render**: Connect GitHub repo
-- **AWS ECS/EKS**: Push to ECR, deploy container
-
-### Frontend Options
-- **Vercel**: Connect GitHub, auto-deploy
-- **Netlify**: Connect repo, set build command
-- **Cloudflare Pages**: Similar to Vercel/Netlify
-- **Static**: Build and serve via nginx/CDN
-
-### Full-Stack
-```bash
-docker-compose -f docker-compose.yml up -d
-```
-
-See [deployment guide](docs/README_FULL_STACK.md#deployment) for details.
-
-## 🎨 Frontend Preview
-
-The modern React frontend features:
-- 🌑 Dark glassmorphism cybersecurity theme
-- 📊 Dual gauge charts for threat visualization
-- 🎭 Smooth animations with Framer Motion
-- 🎯 Color-coded risk levels (green → red)
-- 📱 Responsive mobile-friendly design
-- ⚡ Fast loading with Vite HMR
-
-## 🔐 Security
-
-- ✅ Input validation (Pydantic)
-- ✅ CORS configured
-- ✅ No secrets in code
-- ✅ Type safety (mypy strict)
-- ✅ Dependency scanning ready
-- ⚠️ Rate limiting (TODO for production)
-- ⚠️ Authentication (TODO for production)
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create feature branch: `git checkout -b feature/my-feature`
-3. Make changes
-4. Run tests: `cd src/backend && pytest`
-5. Commit: `git commit -m "feat: add feature"`
-6. Push: `git push origin feature/my-feature`
-7. Open Pull Request
-
-## 📝 License
-
-MIT License - see [LICENSE](LICENSE) file
-
-## 🏆 Credits
-
-**Built with:**
-- Clean Architecture principles
-- Hexagonal/Ports & Adapters pattern
-- Modern React best practices
-- Type-driven development
-
-**Author**: Adrian Infantes Romero
+| `README_THREAT_INTEL.md` | **This file** - Getting started |
+| `PROJECT_COMPLETE.md` | Complete project summary |
+| `PROGRESS_SESSION4.md` | API implementation details |
+| `AGENTS.md` | Development guidelines |
 
 ---
 
-**⚡ Built for production ML systems**
+## 🤝 Contributing
 
-For detailed setup and architecture information, see [Full-Stack Guide](docs/README_FULL_STACK.md).
+This is an educational/demo project. For improvements:
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Open a Pull Request
+
+---
+
+## 📝 License
+
+MIT License - see [LICENSE](LICENSE) file for details
+
+---
+
+## 🙏 Acknowledgments
+
+- **FastAPI** - Awesome async web framework
+- **spaCy** - Industrial-strength NLP
+- **gensim** - Topic modeling made easy
+- **Hugging Face** - Transformers library
+- **AlienVault** - OTX threat intelligence platform
+
+---
+
+## 📧 Contact
+
+For questions, feedback, or collaboration:
+- GitHub Issues: [Create an issue](https://github.com/yourusername/threat-intel-aggregator/issues)
+- Email: your.email@example.com
+
+---
+
+**Built with ❤️ for the cybersecurity community**
+
+🛡️ Stay secure! 🛡️
