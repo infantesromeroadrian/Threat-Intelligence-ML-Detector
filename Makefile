@@ -168,15 +168,15 @@ pre-commit:
 
 train-models:
 	@echo "🧠 Training ML models (LDA + Word2Vec)..."
-	python scripts/train_ml_models.py --all
+	python threat_intelligence_aggregator/scripts/train_ml_models.py --all
 
 train-lda:
 	@echo "🧠 Training LDA topic model..."
-	python scripts/train_ml_models.py --model lda
+	python threat_intelligence_aggregator/scripts/train_ml_models.py --model lda
 
 train-word2vec:
 	@echo "🧠 Training Word2Vec similarity model..."
-	python scripts/train_ml_models.py --model word2vec
+	python threat_intelligence_aggregator/scripts/train_ml_models.py --model word2vec
 
 # =============================================================================
 # Data Scraping & Population
@@ -184,19 +184,19 @@ train-word2vec:
 
 scrape-data:
 	@echo "📥 Scraping threat intelligence data..."
-	docker exec threat-intel-api python scripts/scrape_and_populate.py --days 7 --hours 24 --notify
+	docker exec threat-intel-api python threat_intelligence_aggregator/scripts/scrape_and_populate.py --days 7 --hours 24 --notify
 
 scrape-quick:
 	@echo "📥 Quick scrape (1 day, no notifications)..."
-	docker exec threat-intel-api python scripts/scrape_and_populate.py --days 1 --hours 12
+	docker exec threat-intel-api python threat_intelligence_aggregator/scripts/scrape_and_populate.py --days 1 --hours 12
 
 scrape-nvd:
 	@echo "📥 Scraping NVD CVEs only..."
-	docker exec threat-intel-api python scripts/scrape_and_populate.py --days 7 --skip-otx
+	docker exec threat-intel-api python threat_intelligence_aggregator/scripts/scrape_and_populate.py --days 7 --skip-otx
 
 scrape-otx:
 	@echo "📥 Scraping OTX threats only..."
-	docker exec threat-intel-api python scripts/scrape_and_populate.py --hours 24 --skip-nvd
+	docker exec threat-intel-api python threat_intelligence_aggregator/scripts/scrape_and_populate.py --hours 24 --skip-nvd
 
 check-db:
 	@echo "🔍 Checking database statistics..."
