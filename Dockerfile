@@ -43,7 +43,11 @@ RUN python -m spacy download en_core_web_sm
 FROM dependencies AS app
 
 # Copy application source code (entire tool)
-COPY threat_intelligence_aggregator/ ./threat_intelligence_aggregator/
+COPY domain/ ./domain/
+COPY infrastructure/ ./infrastructure/
+COPY application/ ./application/
+COPY models/ ./models/
+COPY __init__.py ./
 COPY pyproject.toml ./
 COPY README.md ./
 
@@ -73,29 +77,5 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
     CMD curl -f http://localhost:8000/health || exit 1
 
 # Default command: Start FastAPI server
-CMD ["uvicorn", "src.threat_intelligence_aggregator.infrastructure.api.main:app", \
+CMD ["uvicorn", "infrastructure.api.main:app", \
      "--host", "0.0.0.0", "--port", "8000"]
-
-# -----------------------------------------------------------------------------
-# Stage 4: Development image (optional, for debugging)
-# -----------------------------------------------------------------------------
-FROM app AS development
-
-# Switch back to root to install dev dependencies
-USER root
-
-# Copy dev requirements
-COPY requirements-dev.txt .
-
-# Install development dependencies
-RUN pip install --no-cache-dir -r requirements-dev.txt
-
-# Install pre-commit
-RUN pip install --no-cache-dir pre-commit
-
-# Switch back to non-root user
-USER appuser
-
-# Override CMD for development (with auto-reload)
-CMD ["uvicorn", "src.threat_intelligence_aggregator.infrastructure.api.main:app", \
-     "--host", "0.0.0.0", "--port", "8000", "--reload"]

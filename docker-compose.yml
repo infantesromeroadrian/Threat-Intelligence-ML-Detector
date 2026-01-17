@@ -44,7 +44,7 @@ services:
   # ---------------------------------------------------------------------------
   frontend:
     build:
-      context: ./threat_intelligence_aggregator/frontend
+      context: ./frontend
       dockerfile: Dockerfile
     image: threat-intel-frontend:latest
     container_name: threat-intel-frontend

@@ -18,12 +18,6 @@ help:
 	@echo "  make logs-api      - View API logs"
 	# @echo "  make logs-dash     - View Dashboard logs" # No dashboard yet
 	@echo ""
-	@echo "🔧 Docker Commands (Development):"
-	@echo "  make dev-build     - Build development images"
-	@echo "  make dev-up        - Start services in dev mode (hot-reload)"
-	@echo "  make dev-down      - Stop dev services"
-	@echo "  make dev-logs      - View dev logs"
-	@echo ""
 	@echo "🧹 Cleanup Commands:"
 	@echo "  make clean         - Stop services and remove containers"
 	@echo "  make clean-all     - Remove containers, volumes, and images"
@@ -76,27 +70,11 @@ ps:
 	docker-compose ps
 
 # =============================================================================
-# Docker Commands - Development
-# =============================================================================
-
-dev-build:
-	docker-compose -f docker-compose.yml -f docker-compose.dev.yml build
-
-dev-up:
-	docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
-
-dev-down:
-	docker-compose -f docker-compose.yml -f docker-compose.dev.yml down
-
-dev-logs:
-	docker-compose -f docker-compose.yml -f docker-compose.dev.yml logs -f
-
-# =============================================================================
 # CLI Commands
 # =============================================================================
 
 cli:
-	docker-compose run --rm cli python -m threat_intelligence_aggregator.infrastructure.cli.commands $(CMD)
+	docker-compose run --rm cli python -m infrastructure.cli.commands $(CMD)
 
 shell:
 	docker-compose exec api /bin/bash
@@ -106,13 +84,13 @@ shell:
 
 # Example CLI commands
 scrape-cves:
-	docker-compose run --rm cli python -m threat_intelligence_aggregator.infrastructure.cli.commands scrape-cves --days 7
+	docker-compose run --rm cli python -m infrastructure.cli.commands scrape-cves --days 7
 
 extract-iocs:
-	docker-compose run --rm cli python -m threat_intelligence_aggregator.infrastructure.cli.commands extract-iocs
+	docker-compose run --rm cli python -m infrastructure.cli.commands extract-iocs
 
 discover-topics:
-	docker-compose run --rm cli python -m threat_intelligence_aggregator.infrastructure.cli.commands discover-topics --num-topics 10
+	docker-compose run --rm cli python -m infrastructure.cli.commands discover-topics --num-topics 10
 
 # =============================================================================
 # Cleanup Commands
@@ -148,7 +126,7 @@ test:
 	pytest
 
 test-cov:
-	pytest --cov=threat_intelligence_aggregator --cov-report=html --cov-report=term
+	pytest --cov=. --cov-report=html --cov-report=term
 
 lint:
 	ruff check .
@@ -157,7 +135,7 @@ format:
 	ruff format .
 
 typecheck:
-	mypy threat_intelligence_aggregator --strict --ignore-missing-imports
+	mypy . --strict --ignore-missing-imports --exclude '(tests|scripts|frontend|data|docs|notebooks|historyMD|assets|ml-course-venv)'
 
 pre-commit:
 	pre-commit run --all-files
@@ -168,15 +146,15 @@ pre-commit:
 
 train-models:
 	@echo "🧠 Training ML models (LDA + Word2Vec)..."
-	python threat_intelligence_aggregator/scripts/train_ml_models.py --all
+	python scripts/train_ml_models.py --all
 
 train-lda:
 	@echo "🧠 Training LDA topic model..."
-	python threat_intelligence_aggregator/scripts/train_ml_models.py --model lda
+	python scripts/train_ml_models.py --model lda
 
 train-word2vec:
 	@echo "🧠 Training Word2Vec similarity model..."
-	python threat_intelligence_aggregator/scripts/train_ml_models.py --model word2vec
+	python scripts/train_ml_models.py --model word2vec
 
 # =============================================================================
 # Data Scraping & Population
@@ -184,19 +162,19 @@ train-word2vec:
 
 scrape-data:
 	@echo "📥 Scraping threat intelligence data..."
-	docker exec threat-intel-api python threat_intelligence_aggregator/scripts/scrape_and_populate.py --days 7 --hours 24 --notify
+	docker exec threat-intel-api python scripts/scrape_and_populate.py --days 7 --hours 24 --notify
 
 scrape-quick:
 	@echo "📥 Quick scrape (1 day, no notifications)..."
-	docker exec threat-intel-api python threat_intelligence_aggregator/scripts/scrape_and_populate.py --days 1 --hours 12
+	docker exec threat-intel-api python scripts/scrape_and_populate.py --days 1 --hours 12
 
 scrape-nvd:
 	@echo "📥 Scraping NVD CVEs only..."
-	docker exec threat-intel-api python threat_intelligence_aggregator/scripts/scrape_and_populate.py --days 7 --skip-otx
+	docker exec threat-intel-api python scripts/scrape_and_populate.py --days 7 --skip-otx
 
 scrape-otx:
 	@echo "📥 Scraping OTX threats only..."
-	docker exec threat-intel-api python threat_intelligence_aggregator/scripts/scrape_and_populate.py --hours 24 --skip-nvd
+	docker exec threat-intel-api python scripts/scrape_and_populate.py --hours 24 --skip-nvd
 
 check-db:
 	@echo "🔍 Checking database statistics..."
