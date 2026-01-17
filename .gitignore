@@ -110,6 +110,12 @@ Pipfile.lock
 # Comments directory
 .comments/
 
+# History/Progress documentation (NO commit)
+historyMD/
+*.md
+!README.md
+!src/**/*.md
+
 # Assets (if any large files)
 assets/
 
