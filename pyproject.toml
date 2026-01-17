@@ -110,14 +110,14 @@ module = [
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
-testpaths = ["src/threat_intelligence_aggregator/tests"]
+testpaths = ["tests"]
 python_files = ["test_*.py", "*_test.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
 addopts = [
     "--strict-markers",
     "--strict-config",
-    "--cov=src/threat_intelligence_aggregator",
+    "--cov=.",
     "--cov-report=term-missing",
     "--cov-report=html",
 ]
@@ -129,11 +129,18 @@ markers = [
 ]
 
 [tool.coverage.run]
-source = ["src/threat_intelligence_aggregator"]
+source = ["."]
 omit = [
     "*/tests/*",
     "*/__init__.py",
     "*/migrations/*",
+    "scripts/*",
+    "frontend/*",
+    "data/*",
+    "docs/*",
+    "notebooks/*",
+    "historyMD/*",
+    "assets/*",
 ]
 
 [tool.coverage.report]
