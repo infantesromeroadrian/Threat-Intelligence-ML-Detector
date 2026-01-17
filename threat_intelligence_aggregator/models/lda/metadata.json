@@ -1,0 +1,8 @@
+{
+  "num_topics": 10,
+  "num_documents": 300,
+  "coherence_score": NaN,
+  "trained_at": "2026-01-17T01:31:59.488597",
+  "model_version": "1.0",
+  "data_source": "mock"
+}

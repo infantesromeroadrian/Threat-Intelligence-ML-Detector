@@ -43,7 +43,7 @@ RUN python -m spacy download en_core_web_sm
 FROM dependencies AS app
 
 # Copy application source code
-COPY src/ ./src/
+COPY threat_intelligence_aggregator/ ./threat_intelligence_aggregator/
 COPY scripts/ ./scripts/
 COPY pyproject.toml ./
 COPY README.md ./

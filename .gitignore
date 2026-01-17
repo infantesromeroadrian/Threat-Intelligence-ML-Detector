@@ -116,8 +116,12 @@ historyMD/
 !README.md
 !src/**/*.md
 
-# Assets (if any large files)
+# Course-specific files (NOT part of Threat Intel project)
 assets/
+notebooks/
+ml-course-venv/
+models/malware_cnn*
+models/skills_assessment*
 
 # MLflow
 mlruns/

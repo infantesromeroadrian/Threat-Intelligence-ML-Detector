@@ -1,0 +1,11 @@
+{
+  "vector_size": 100,
+  "window": 5,
+  "min_count": 2,
+  "epochs": 10,
+  "num_documents": 300,
+  "vocabulary_size": 200,
+  "trained_at": "2026-01-17T01:31:59.548107",
+  "model_version": "1.0",
+  "data_source": "mock"
+}

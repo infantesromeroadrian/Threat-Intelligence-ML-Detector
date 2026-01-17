@@ -390,7 +390,7 @@ def main() -> None:
     logger.info("Next steps:")
     logger.info("  1. Models will be loaded automatically on app startup")
     logger.info("  2. To retrain with real data: python scripts/train_ml_models.py --all")
-    logger.info("  3. View metadata: cat src/threat_intelligence_aggregator/models/*/metadata.json")
+    logger.info("  3. View metadata: cat threat_intelligence_aggregator/models/*/metadata.json")
     logger.info("")
 
 

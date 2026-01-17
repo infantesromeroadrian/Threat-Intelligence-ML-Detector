@@ -96,7 +96,7 @@ dev-logs:
 # =============================================================================
 
 cli:
-	docker-compose run --rm cli python -m src.threat_intelligence_aggregator.infrastructure.cli.commands $(CMD)
+	docker-compose run --rm cli python -m threat_intelligence_aggregator.infrastructure.cli.commands $(CMD)
 
 shell:
 	docker-compose exec api /bin/bash
@@ -106,13 +106,13 @@ shell:
 
 # Example CLI commands
 scrape-cves:
-	docker-compose run --rm cli python -m src.threat_intelligence_aggregator.infrastructure.cli.commands scrape-cves --days 7
+	docker-compose run --rm cli python -m threat_intelligence_aggregator.infrastructure.cli.commands scrape-cves --days 7
 
 extract-iocs:
-	docker-compose run --rm cli python -m src.threat_intelligence_aggregator.infrastructure.cli.commands extract-iocs
+	docker-compose run --rm cli python -m threat_intelligence_aggregator.infrastructure.cli.commands extract-iocs
 
 discover-topics:
-	docker-compose run --rm cli python -m src.threat_intelligence_aggregator.infrastructure.cli.commands discover-topics --num-topics 10
+	docker-compose run --rm cli python -m threat_intelligence_aggregator.infrastructure.cli.commands discover-topics --num-topics 10
 
 # =============================================================================
 # Cleanup Commands
@@ -148,7 +148,7 @@ test:
 	pytest
 
 test-cov:
-	pytest --cov=src/threat_intelligence_aggregator --cov-report=html --cov-report=term
+	pytest --cov=threat_intelligence_aggregator --cov-report=html --cov-report=term
 
 lint:
 	ruff check .
@@ -157,7 +157,7 @@ format:
 	ruff format .
 
 typecheck:
-	mypy src/threat_intelligence_aggregator --strict --ignore-missing-imports
+	mypy threat_intelligence_aggregator --strict --ignore-missing-imports
 
 pre-commit:
 	pre-commit run --all-files
